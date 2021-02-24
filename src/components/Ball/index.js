@@ -1,20 +1,15 @@
 import React, {useRef, useEffect, useCallback} from 'react';
+import { connect } from 'react-redux';
 
 import './styles.scss';
 
-function Ball(clock) {
+function Ball({clock, boardData}) {
     const vector = useRef({'top': 1/Math.sqrt(2), 'left': 1/Math.sqrt(2)});
     const ball = useRef(null);
+    const { topMinPos, topMaxPos, leftMinPos, leftMaxPos } = boardData;
 
     let velocity = 20;
-    const lateralMargin = 20;
-    const ballSize = 50;
-    const topMinPos = lateralMargin;
-    const leftMinPos = lateralMargin;
-    const h = window.innerHeight;
-    const w = window.innerWidth;
-    const topMaxPos = h - ballSize - lateralMargin;
-    const leftMaxPos = w - ballSize - lateralMargin;
+    // const ballSize = 50;
 
     const isThereCollision = useCallback((ballTop, ballLeft) => {
         if ( ballTop < topMinPos || ballTop > topMaxPos || ballLeft < leftMinPos || ballLeft > leftMaxPos) {
@@ -53,8 +48,12 @@ function Ball(clock) {
     }, [clock, isThereCollision, collision, vector.current.top, vector.current.left, velocity]);
 
     return (
-        <div id="ball" ref={ball} style={{"top": lateralMargin, "left": lateralMargin}}></div>
+        <div id="ball" ref={ball} style={{"top": boardData.margin, "left": boardData.margin }}></div>
     );
 }
 
-export default Ball;
+const mapStateToProps = state => {
+    return { boardData : state.board }
+}
+
+export default connect(mapStateToProps)(Ball);

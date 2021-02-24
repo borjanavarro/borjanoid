@@ -1,6 +1,9 @@
 import React, {useState, useEffect} from 'react';
 import * as d3 from 'd3-timer';
-import Ball from './components/Ball/index.js';
+import { Provider } from 'react-redux';
+import Board from './components/Board/index.js'
+
+import store from './redux/store';
 
 import './scss/global.scss';
 
@@ -17,12 +20,11 @@ function App() {
     })
 
     return (
+        <Provider store={store}>
         <div className="App">
-            <div className="container">
-                <Ball clock={clock}/>
-                
-            </div>
+            <Board clock={clock}></Board>
         </div>
+        </Provider>
     );
 }
 
