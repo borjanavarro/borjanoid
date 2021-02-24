@@ -23,16 +23,16 @@ function Ball({clock, boardData, ballData }) {
 
     const collision = useCallback((ballTop, ballLeft) => {
         if ( ballTop < topMinPos ) {
-            ball.current.style.top = topMinPos + 'px';
+            setBallPos({top: topMinPos, left: ballLeft});
             vector.current = {'top': -vector.current.top, 'left': vector.current.left};
         } else if ( ballTop > topMaxPos ) {
-            ball.current.style.top = topMaxPos + 'px';
-            vector.current = {'top': -vector.current.top, 'left': vector.current.left};
+                setBallPos({top: topMaxPos, left: ballLeft});
+                vector.current = {'top': -vector.current.top, 'left': vector.current.left};
         } else if ( ballLeft < leftMinPos ) {
-            ball.current.style.left = leftMinPos + 'px';
+            setBallPos({top: ballTop, left: leftMinPos});
             vector.current = {'top': vector.current.top, 'left': -vector.current.left};
         } else if ( ballLeft > leftMaxPos ) {
-            ball.current.style.left = leftMaxPos + 'px';
+            setBallPos({top: ballTop, left: leftMaxPos});
             vector.current = {'top': vector.current.top, 'left': -vector.current.left};
         }
     }, [topMinPos, topMaxPos, leftMinPos, leftMaxPos])
