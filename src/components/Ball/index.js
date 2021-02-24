@@ -1,10 +1,10 @@
-import React, { useState, useRef, useEffect, useCallback} from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { connect } from 'react-redux';
 
 import './styles.scss';
 
-function Ball({clock, boardData, ballData }) {
-    const [ballPos, setBallPos] = useState({top: boardData.topMinPos, left: boardData.leftMinPos})
+function Ball({ clock, boardData, ballData }) {
+    const [position, setPosition] = useState({top: boardData.topMinPos, left: boardData.leftMinPos})
     const vector = useRef({'top': 1/Math.sqrt(2), 'left': 1/Math.sqrt(2)});
     const ball = useRef(null);
     const { topMinPos, topMaxPos, leftMinPos, leftMaxPos } = boardData;
@@ -23,16 +23,16 @@ function Ball({clock, boardData, ballData }) {
 
     const collision = useCallback((ballTop, ballLeft) => {
         if ( ballTop < topMinPos ) {
-            setBallPos({top: topMinPos, left: ballLeft});
+            setPosition({top: topMinPos, left: ballLeft});
             vector.current = {'top': -vector.current.top, 'left': vector.current.left};
         } else if ( ballTop > topMaxPos ) {
-                setBallPos({top: topMaxPos, left: ballLeft});
+                setPosition({top: topMaxPos, left: ballLeft});
                 vector.current = {'top': -vector.current.top, 'left': vector.current.left};
         } else if ( ballLeft < leftMinPos ) {
-            setBallPos({top: ballTop, left: leftMinPos});
+            setPosition({top: ballTop, left: leftMinPos});
             vector.current = {'top': vector.current.top, 'left': -vector.current.left};
         } else if ( ballLeft > leftMaxPos ) {
-            setBallPos({top: ballTop, left: leftMaxPos});
+            setPosition({top: ballTop, left: leftMaxPos});
             vector.current = {'top': vector.current.top, 'left': -vector.current.left};
         }
     }, [topMinPos, topMaxPos, leftMinPos, leftMaxPos])
@@ -44,17 +44,17 @@ function Ball({clock, boardData, ballData }) {
         if (isThereCollision(ballTop, ballLeft)) {
             collision(ballTop, ballLeft);
         } else {
-            setBallPos({
+            setPosition({
                 top: ballTop + vector.current.top * ballData.velocity + 'px',
                 left: ballLeft + vector.current.left * ballData.velocity + 'px'
             });
         }
-    }, [clock, isThereCollision, collision, setBallPos, vector.current.top, vector.current.left, ballData.velocity]);
+    }, [clock, isThereCollision, collision, setPosition, vector.current.top, vector.current.left, ballData.velocity]);
 
     return (
         <div id="ball" ref={ball} style={{
-            top: ballPos.top,
-            left: ballPos.left,
+            top: position.top,
+            left: position.left,
             width: ballData.size,
             height: ballData.size,
             borderRadius: ballData.size
