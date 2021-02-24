@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
-import Ball from '../Ball/index.js';
+import Ball from '../Ball/index';
+import Player from '../Player/index'
 import updateData from '../../redux/actions/action'
 
 import './styles.scss';
 
-function Board({clock, updateBoardData, boardData, ballData, playerData}) {
+function Board({ clock, updateBoardData, boardData, ballData }) {
     const [loading, setLoading] = useState(true);
     const board = useRef(null);
 
@@ -40,6 +41,7 @@ function Board({clock, updateBoardData, boardData, ballData, playerData}) {
                 }}>
                     <div id="board">
                         <Ball clock={clock} />
+                        <Player />
                     </div>
                 </div>
             </div>
@@ -50,8 +52,7 @@ function Board({clock, updateBoardData, boardData, ballData, playerData}) {
 const mapStateToProps = state => {
     return {
         boardData: state.board,
-        ballData: state.ball,
-        playerData: state.player
+        ballData: state.ball
      }
 }
 
