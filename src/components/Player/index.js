@@ -11,7 +11,6 @@ function Player({ boardData, playerData, keyDown, setKeyDown }) {
 
     useEffect( () => {
         if ( keyDown ) {
-            setKeyDown(false);
             const oldPosition = parseInt(player.current.style.left, 10);      
 
             if ( keyDown === 'ArrowLeft' ) {
@@ -27,6 +26,7 @@ function Player({ boardData, playerData, keyDown, setKeyDown }) {
                     setPosition( leftMaxPos );
                 }
             }
+            setKeyDown(false);
         }
     }, [keyDown, setKeyDown, playerData.velocity, leftMaxPos, leftMinPos ]);
 

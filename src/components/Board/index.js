@@ -8,12 +8,13 @@ import './styles.scss';
 
 function Board({ updateBoardData, ballData }) {
     const [keyDown, setKeyDown] = useState(false);
+    const pauseRef = useRef(true);
     const board = useRef(null);
 
     useEffect(() => {
-        document.addEventListener('keydown', (e) => setKeyDown(e.key));
+        document.addEventListener('keydown', (e) => setKeyDown(e.code));
 
-        return document.removeEventListener('keydown', (e) => setKeyDown(e.key));
+        return document.removeEventListener('keydown', (e) => setKeyDown(e.code));
     }, [updateBoardData, ballData.size])
 
     return (
@@ -23,9 +24,9 @@ function Board({ updateBoardData, ballData }) {
                 height: 600
             }}>
                 <div id="board">
-                    <Ball />
+                    <Ball keyDown={keyDown} setKeyDown={setKeyDown} pauseRef={pauseRef} />
                 </div>
-                <Player keyDown={keyDown} setKeyDown={setKeyDown} />
+                <Player keyDown={keyDown} setKeyDown={setKeyDown} pauseRef={pauseRef} />
             </div>
         </div>
     )

@@ -1,17 +1,29 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { connect } from 'react-redux';
 import { useFrameLoop } from '../../utils/FrameLoop'
+import { generateRandomVector } from '../../utils/functions'
 
 import './styles.scss';
 
-function Ball({ boardData, ballData }) {
-    const [position, setPosition] = useState({top: boardData.topMinPos, left: boardData.leftMinPos})
-    const vector = useRef({'top': 1/Math.sqrt(2), 'left': 1/Math.sqrt(2)});
+function Ball({ boardData, ballData, keyDown, setKeyDown, pauseRef }) {
+    const [position, setPosition] = useState({
+        top: boardData.topMaxPos - ballData.size,
+        left: (boardData.leftMaxPos - boardData.leftMinPos) / 2 - ballData.size
+    })
+    const vector = useRef( generateRandomVector() );
     const ball = useRef(null);
     let { topMinPos, topMaxPos, leftMinPos, leftMaxPos } = boardData;
     topMaxPos = topMaxPos - ballData.size;
     leftMaxPos = leftMaxPos - ballData.size;
 
+    useEffect(() => {
+        if ( keyDown ) {
+            if ( keyDown === 'Space' ) {
+                setKeyDown(false);
+                pauseRef.current = false;
+            }
+        }
+    }, [keyDown, setKeyDown, pauseRef])
     const isThereCollision = useCallback((ballTop, ballLeft) => {
         if ( ballTop < topMinPos
             || ballTop > topMaxPos
@@ -40,17 +52,19 @@ function Ball({ boardData, ballData }) {
         }
     }, [topMinPos, topMaxPos, leftMinPos, leftMaxPos])
 
-    useFrameLoop( () => {
-        const ballTop = parseInt(ball.current.style.top, 10);
-        const ballLeft = parseInt(ball.current.style.left, 10);
+    useFrameLoop(() => {
+        if ( !pauseRef.current ) {
+            const ballTop = parseInt(ball.current.style.top, 10);
+            const ballLeft = parseInt(ball.current.style.left, 10);
 
-        if (isThereCollision(ballTop, ballLeft)) {
-            collision(ballTop, ballLeft);
-        } else {
-            setPosition({
-                top: ballTop + vector.current.top * ballData.velocity,
-                left: ballLeft + vector.current.left * ballData.velocity,
-            });
+            if (isThereCollision(ballTop, ballLeft)) {
+                collision(ballTop, ballLeft);
+            } else {
+                setPosition({
+                    top: ballTop + vector.current.top * ballData.velocity,
+                    left: ballLeft + vector.current.left * ballData.velocity,
+                });
+            }
         }
     })
 
