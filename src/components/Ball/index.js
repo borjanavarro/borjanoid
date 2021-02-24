@@ -1,18 +1,20 @@
-import React, {useRef, useEffect, useCallback} from 'react';
+import React, { useState, useRef, useEffect, useCallback} from 'react';
 import { connect } from 'react-redux';
 
 import './styles.scss';
 
-function Ball({clock, boardData}) {
+function Ball({clock, boardData, ballData }) {
+    const [ballPos, setBallPos] = useState({top: boardData.topMinPos, left: boardData.leftMinPos})
     const vector = useRef({'top': 1/Math.sqrt(2), 'left': 1/Math.sqrt(2)});
     const ball = useRef(null);
     const { topMinPos, topMaxPos, leftMinPos, leftMaxPos } = boardData;
 
-    let velocity = 20;
-    // const ballSize = 50;
-
     const isThereCollision = useCallback((ballTop, ballLeft) => {
-        if ( ballTop < topMinPos || ballTop > topMaxPos || ballLeft < leftMinPos || ballLeft > leftMaxPos) {
+        if ( ballTop < topMinPos
+            || ballTop > topMaxPos
+            || ballLeft < leftMinPos
+            || ballLeft > leftMaxPos
+        ) {
             return true;
         }
 
@@ -42,18 +44,29 @@ function Ball({clock, boardData}) {
         if (isThereCollision(ballTop, ballLeft)) {
             collision(ballTop, ballLeft);
         } else {
-            ball.current.style.top = parseInt(ball.current.style.top, 10) + vector.current.top * velocity + 'px';
-            ball.current.style.left = parseInt(ball.current.style.left, 10) + vector.current.left * velocity + 'px';
+            setBallPos({
+                top: ballTop + vector.current.top * ballData.velocity + 'px',
+                left: ballLeft + vector.current.left * ballData.velocity + 'px'
+            });
         }
-    }, [clock, isThereCollision, collision, vector.current.top, vector.current.left, velocity]);
+    }, [clock, isThereCollision, collision, setBallPos, vector.current.top, vector.current.left, ballData.velocity]);
 
     return (
-        <div id="ball" ref={ball} style={{"top": boardData.margin, "left": boardData.margin }}></div>
+        <div id="ball" ref={ball} style={{
+            top: ballPos.top,
+            left: ballPos.left,
+            width: ballData.size,
+            height: ballData.size,
+            borderRadius: ballData.size
+        }}></div>
     );
 }
 
 const mapStateToProps = state => {
-    return { boardData : state.board }
+    return {
+        boardData : state.board, 
+        ballData: state.ball
+    }
 }
 
 export default connect(mapStateToProps)(Ball);

@@ -1,0 +1,19 @@
+.center-board {
+    width: 100%;
+}
+
+.board-container {
+    margin-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+    border: 10px solid black;
+    border-bottom: none;
+    box-sizing: content-box;
+}
+
+#board {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
