@@ -1,13 +1,16 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import { connect } from 'react-redux';
+import { useFrameLoop } from '../../utils/FrameLoop'
 
 import './styles.scss';
 
-function Ball({ clock, boardData, ballData }) {
+function Ball({ boardData, ballData }) {
     const [position, setPosition] = useState({top: boardData.topMinPos, left: boardData.leftMinPos})
     const vector = useRef({'top': 1/Math.sqrt(2), 'left': 1/Math.sqrt(2)});
     const ball = useRef(null);
-    const { topMinPos, topMaxPos, leftMinPos, leftMaxPos } = boardData;
+    let { topMinPos, topMaxPos, leftMinPos, leftMaxPos } = boardData;
+    topMaxPos = topMaxPos - ballData.size;
+    leftMaxPos = leftMaxPos - ballData.size;
 
     const isThereCollision = useCallback((ballTop, ballLeft) => {
         if ( ballTop < topMinPos
@@ -37,7 +40,7 @@ function Ball({ clock, boardData, ballData }) {
         }
     }, [topMinPos, topMaxPos, leftMinPos, leftMaxPos])
 
-    useEffect(() => {
+    useFrameLoop( () => {
         const ballTop = parseInt(ball.current.style.top, 10);
         const ballLeft = parseInt(ball.current.style.left, 10);
 
@@ -45,11 +48,11 @@ function Ball({ clock, boardData, ballData }) {
             collision(ballTop, ballLeft);
         } else {
             setPosition({
-                top: ballTop + vector.current.top * ballData.velocity + 'px',
-                left: ballLeft + vector.current.left * ballData.velocity + 'px'
+                top: ballTop + vector.current.top * ballData.velocity,
+                left: ballLeft + vector.current.left * ballData.velocity,
             });
         }
-    }, [clock, isThereCollision, collision, setPosition, vector.current.top, vector.current.left, ballData.velocity]);
+    })
 
     return (
         <div id="ball" ref={ball} style={{

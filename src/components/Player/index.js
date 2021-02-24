@@ -3,39 +3,36 @@ import { connect } from 'react-redux';
 
 import './styles.scss';
 
-function Player({boardData}) {
-    
-
-    const { leftMinPos, leftMaxPos } = boardData;
-
-    let velocity = 1;
-    let width = 100;
-    let height = 20;
-    let borderWidth = 10;
-
-    const [position, setPosition] = useState(borderWidth);
+function Player({ boardData, playerData, keyDown, setKeyDown }) {
+    let { leftMinPos, leftMaxPos } = boardData;
+    leftMaxPos = leftMaxPos - playerData.width;
+    const [position, setPosition] = useState(leftMinPos);
     const player = useRef();
 
-    useEffect(() => {
-        document.addEventListener('keydown', movePlatform);
+    useEffect( () => {
+        if ( keyDown ) {
+            setKeyDown(false);
+            const oldPosition = parseInt(player.current.style.left, 10);      
 
-        return document.removeEventListener('onkeydown', movePlatform);
-    })
-
-    const movePlatform = (e) => {
-        const oldPosition = parseInt(player.current.style.left, 10);
-
-        if ( e.keyCode === 37 /*left key */ && oldPosition - borderWidth >= leftMinPos ) {
-            setPosition( oldPosition - velocity);
-
-        } else if ( e.keyCode === 39 /*right key */ && oldPosition + borderWidth + width <= leftMaxPos ) {
-            setPosition( oldPosition + velocity);
+            if ( keyDown === 'ArrowLeft' ) {
+                if ( oldPosition > leftMinPos ) {
+                    setPosition( oldPosition - playerData.velocity );
+                } else {
+                    setPosition( leftMinPos );
+                }
+            } else if ( keyDown === 'ArrowRight' ) {
+                if ( oldPosition < leftMaxPos ) {
+                    setPosition( oldPosition + playerData.velocity );
+                } else {
+                    setPosition( leftMaxPos );
+                }
+            }
         }
-    }
+    }, [keyDown, setKeyDown, playerData.velocity, leftMaxPos, leftMinPos ]);
 
     return (
         <div id="player" ref={player} style={{
-            bottom: - height,
+            bottom: - playerData.height,
             left: position
             }}>
 
@@ -45,8 +42,8 @@ function Player({boardData}) {
 
 const mapStateToProps = state => {
     return {
-        boardData : state.board, 
-        ballData: state.ball
+        boardData : state.board,
+        playerData: state.player
     }
 }
 

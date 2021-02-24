@@ -1,6 +1,7 @@
 import { UPDATE_DATA } from '../actions/actionTypes';
 
 const initialState = {
+    velocity: 20,
     width: 100,
     height: 20,
 };

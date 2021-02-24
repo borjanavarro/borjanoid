@@ -6,52 +6,33 @@ import updateData from '../../redux/actions/action'
 
 import './styles.scss';
 
-function Board({ clock, updateBoardData, boardData, ballData }) {
-    const [loading, setLoading] = useState(true);
+function Board({ updateBoardData, ballData }) {
+    const [keyDown, setKeyDown] = useState(false);
     const board = useRef(null);
 
-    useEffect( () => {
-        updateBoardData({
-            topMinPos: 0,
-            topMaxPos: 600 - ballData.size,
-            leftMinPos: 0,
-            leftMaxPos: 400 - ballData.size,
-        });
-        setLoading(false);
+    useEffect(() => {
+        document.addEventListener('keydown', (e) => setKeyDown(e.key));
 
-    }, [board, boardData.borderWidth, ballData.size, updateBoardData])
+        return document.removeEventListener('keydown', (e) => setKeyDown(e.key));
+    }, [updateBoardData, ballData.size])
 
-    if ( loading ) {
-        return (
-            <div className="center-board">
-                <div className="board-container" ref={board} style={{
-                    width: 400,
-                    height: 600
-                }}>
-                    <div id="board"></div>
+    return (
+        <div className="center-board">
+            <div className="board-container" ref={board} style={{
+                width: 400,
+                height: 600
+            }}>
+                <div id="board">
+                    <Ball />
                 </div>
+                <Player keyDown={keyDown} setKeyDown={setKeyDown} />
             </div>
-        )
-    } else {
-        return (
-            <div className="center-board">
-                <div className="board-container" ref={board} style={{
-                    width: 400,
-                    height: 600
-                }}>
-                    <div id="board">
-                        <Ball clock={clock} />
-                        <Player />
-                    </div>
-                </div>
-            </div>
-        )
-    }
+        </div>
+    )
 }
 
 const mapStateToProps = state => {
     return {
-        boardData: state.board,
         ballData: state.ball
      }
 }

@@ -4035,11 +4035,6 @@
     "es5-ext" "^0.10.50"
     "type" "^1.0.1"
 
-"d3-timer@^2.0.0":
-  "integrity" "sha512-TO4VLh0/420Y/9dO3+f9abDEFYeCUr2WZRlxJvbp4HPTQcSylXNiL6yZa9FIUvV1yRiFufl1bszTCLDqv9PWNA=="
-  "resolved" "https://registry.npmjs.org/d3-timer/-/d3-timer-2.0.0.tgz"
-  "version" "2.0.0"
-
 "damerau-levenshtein@^1.0.6":
   "integrity" "sha512-JVrozIeElnj3QzfUIt8tB8YMluBJom4Vw9qTPpjGYQ9fYlB3D/rb6OordUxf3xeFB35LKWs0xqcO5U6ySvBtug=="
   "resolved" "https://registry.yarnpkg.com/damerau-levenshtein/-/damerau-levenshtein-1.0.6.tgz"
