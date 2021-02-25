@@ -7,8 +7,11 @@ export function updateObjectIfNeeded(obj1, obj2) {
  }
 
  export function generateRandomVector() {
-    let top = Math.random();
-    let left = Math.sqrt(1 - Math.pow(top, 2));
+    const MAXIMUM_VALUE = 10;
+    const MINIMUM_VALUE = 3;
+    const top = Math.random() * ( MAXIMUM_VALUE - MINIMUM_VALUE ) + MINIMUM_VALUE;
+    const left = MAXIMUM_VALUE - top;
+    const MOD = Math.sqrt(Math.pow(top, 2) + Math.pow(left, 2));
 
-    return {top: -top, left}
+    return {top: -top/ MOD, left: left / MOD}
 }
