@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import {useRef, useEffect} from 'react'
+import { useRef, useEffect } from 'react'
 
-export const useFrameLoop = (callback) => {
+const useFrameLoop = (callback) => {
 
     const requestID = useRef();
     const previousTime = useRef();
@@ -22,3 +22,5 @@ export const useFrameLoop = (callback) => {
         return ()=> cancelAnimationFrame(requestID.current);
     }, []);
 }
+
+export default useFrameLoop;
