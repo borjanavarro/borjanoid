@@ -1,16 +1,17 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { connect } from 'react-redux';
+import React, { useEffect, useRef } from 'react';
+// import Wall from '../Wall/index';
 import Ball from '../Ball/index';
 import Player from '../Player/index';
-import updateData from '../../redux/actions/action';
 import useKeyboard from '../../utils/Keyboard';
+// import useBallPosition from '../../utils/BallPosition';
 
 import './styles.scss';
 
-function Board({ updateBoardData, ballData }) {
+function Board() {
     const pauseRef = useRef(true);
-    const board = useRef(null);
+    const ballRef = useRef();
     const keyDown = useKeyboard();
+    // const [ballTop, ballLeft] = useBallPosition(ballRef);
 
     useEffect(() => {
         if ( keyDown === 'Space' ) {
@@ -22,12 +23,13 @@ function Board({ updateBoardData, ballData }) {
 
     return (
         <div className="center-board">
-            <div className="board-container" ref={board} style={{
+            <div className="board-container" style={{
                 width: 400,
                 height: 600
             }}>
                 <div id="board">
-                    <Ball pauseRef={pauseRef} />
+                    {/* <Wall /> */}
+                    <Ball ballRef={ballRef} pauseRef={pauseRef} />
                 </div>
                 <Player pauseRef={pauseRef} />
             </div>
@@ -35,14 +37,4 @@ function Board({ updateBoardData, ballData }) {
     )
 }
 
-const mapStateToProps = state => {
-    return {
-        ballData: state.ball
-     }
-}
-
-const mapDispatchToProps = dispatch => {
-    return { updateBoardData: (data) => dispatch( updateData(data)) };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Board);
+export default Board;
