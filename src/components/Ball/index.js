@@ -16,14 +16,6 @@ function Ball({ boardData, ballData, keyDown, setKeyDown, pauseRef }) {
     topMaxPos = topMaxPos - ballData.size;
     leftMaxPos = leftMaxPos - ballData.size;
 
-    useEffect(() => {
-        if ( keyDown ) {
-            if ( keyDown === 'Space' ) {
-                setKeyDown(false);
-                pauseRef.current = false;
-            }
-        }
-    }, [keyDown, setKeyDown, pauseRef])
     const isThereCollision = useCallback((ballTop, ballLeft) => {
         if ( ballTop < topMinPos
             || ballTop > topMaxPos

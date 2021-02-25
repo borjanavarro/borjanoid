@@ -1,13 +1,15 @@
 import React, { useState, useEffect, useRef} from 'react';
 import { connect } from 'react-redux';
+import useKeyboard from '../../utils/Keyboard';
 
 import './styles.scss';
 
-function Player({ boardData, playerData, keyDown, setKeyDown }) {
+function Player({ boardData, playerData }) {
     let { leftMinPos, leftMaxPos } = boardData;
     leftMaxPos = leftMaxPos - playerData.width;
     const [position, setPosition] = useState(leftMinPos);
     const player = useRef();
+    const keyDown = useKeyboard();
 
     useEffect( () => {
         if ( keyDown ) {
@@ -26,9 +28,8 @@ function Player({ boardData, playerData, keyDown, setKeyDown }) {
                     setPosition( leftMaxPos );
                 }
             }
-            setKeyDown(false);
         }
-    }, [keyDown, setKeyDown, playerData.velocity, leftMaxPos, leftMinPos ]);
+    }, [keyDown, playerData.velocity, leftMaxPos, leftMinPos ]);
 
     return (
         <div id="player" ref={player} style={{

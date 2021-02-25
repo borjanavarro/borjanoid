@@ -1,21 +1,24 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import Ball from '../Ball/index';
-import Player from '../Player/index'
-import updateData from '../../redux/actions/action'
+import Player from '../Player/index';
+import updateData from '../../redux/actions/action';
+import useKeyboard from '../../utils/Keyboard';
 
 import './styles.scss';
 
 function Board({ updateBoardData, ballData }) {
-    const [keyDown, setKeyDown] = useState(false);
     const pauseRef = useRef(true);
     const board = useRef(null);
+    const keyDown = useKeyboard();
 
     useEffect(() => {
-        document.addEventListener('keydown', (e) => setKeyDown(e.code));
-
-        return document.removeEventListener('keydown', (e) => setKeyDown(e.code));
-    }, [updateBoardData, ballData.size])
+        if ( keyDown === 'Space' ) {
+            pauseRef.current = true;
+        } else if ( keyDown === 'Esc' ) {
+            pauseRef.current = pauseRef.current ? false: true;
+        }
+    }, [keyDown])
 
     return (
         <div className="center-board">
@@ -24,9 +27,9 @@ function Board({ updateBoardData, ballData }) {
                 height: 600
             }}>
                 <div id="board">
-                    <Ball keyDown={keyDown} setKeyDown={setKeyDown} pauseRef={pauseRef} />
+                    <Ball pauseRef={pauseRef} />
                 </div>
-                <Player keyDown={keyDown} setKeyDown={setKeyDown} pauseRef={pauseRef} />
+                <Player pauseRef={pauseRef} />
             </div>
         </div>
     )
