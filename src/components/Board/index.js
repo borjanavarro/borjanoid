@@ -5,6 +5,7 @@ import Ball from '../Ball/index';
 import Player from '../Player/index';
 import useKeyboard from '../../utils/Keyboard';
 import useFrameLoop from '../../utils/FrameLoop';
+import { generateRandomVector } from '../../utils/functions';
 
 import './styles.scss';
 
@@ -14,6 +15,7 @@ function Board() {
     const [clock, setClock] = useState(0);
     const [ballTop, setBallTop] = useState(boardData.topMaxPos - ballData.size);
     const [ballLeft, setBallLeft] = useState((boardData.leftMaxPos - boardData.leftMinPos) / 2 - ballData.size);
+    const vector = useRef( generateRandomVector() );
     const pauseRef = useRef(true);
     const keyDown = useKeyboard();
     const { topMinPos, topMaxPos, leftMinPos, leftMaxPos } = boardData;
@@ -38,9 +40,23 @@ function Board() {
             }}>
                 <div id="board">
                     {/* <Wall /> */}
-                    <Ball clock={clock} top={ballTop} setTop={setBallTop} left={ballLeft} setLeft={setBallLeft} />
+                    <Ball 
+                        clock={clock}
+                        top={ballTop} 
+                        setTop={setBallTop} 
+                        left={ballLeft} 
+                        setLeft={setBallLeft} 
+                        vector={vector}
+                    />
                 </div>
-                <Player pauseRef={pauseRef} />
+                <Player 
+                    clock={clock}
+                    ballTop={ballTop}
+                    setBallTop={setBallTop}
+                    ballLeft={ballLeft}
+                    setBallLeft={setBallLeft}
+                    vector={vector}
+                />
             </div>
         </div>
     )

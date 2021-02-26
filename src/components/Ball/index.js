@@ -1,20 +1,15 @@
 import React, { useRef, useCallback, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { generateRandomVector } from '../../utils/functions';
 
 import './styles.scss';
 
-function Ball({ clock, top, setTop, left, setLeft }) {
-    const vector = useRef( generateRandomVector() );
+function Ball({ clock, top, setTop, left, setLeft, vector }) {
     const ball = useRef();
     const boardData = useSelector(state => state.board);
     const ballData = useSelector(state => state.ball);
     let { topMinPos, topMaxPos, leftMinPos, leftMaxPos } = boardData;
     topMaxPos = topMaxPos - ballData.size;
     leftMaxPos = leftMaxPos - ballData.size;
-    
-    // debug
-    const isTherePlayer = _ => true;
 
     const isThereCollision = useCallback((ballTop, ballLeft) => {
         if ( ballTop < topMinPos
@@ -33,12 +28,7 @@ function Ball({ clock, top, setTop, left, setLeft }) {
             setTop(topMinPos);
             vector.current = {'top': -vector.current.top, 'left': vector.current.left};
         } else if ( ballTop > topMaxPos ) {
-            if ( isTherePlayer() ) {
-                setTop(topMaxPos);
-                vector.current = {'top': -vector.current.top, 'left': vector.current.left};
-            } else {
-                // gameLost();
-            }
+            // gameLost();
         } else if ( ballLeft < leftMinPos ) {
             setLeft(leftMinPos);
             vector.current = {'top': vector.current.top, 'left': -vector.current.left};
@@ -46,7 +36,7 @@ function Ball({ clock, top, setTop, left, setLeft }) {
             setLeft(leftMaxPos);
             vector.current = {'top': vector.current.top, 'left': -vector.current.left};
         }
-    }, [topMinPos, topMaxPos, leftMinPos, leftMaxPos, setTop,setLeft])
+    }, [topMinPos, topMaxPos, leftMinPos, leftMaxPos, setTop,setLeft, vector])
 
     useEffect(() => {
         const prevTop = parseInt(ball.current.style.top, 10); 

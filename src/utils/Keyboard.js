@@ -10,7 +10,7 @@ const useKeyboard = () => {
     }, [])
 
     useEffect(() => {
-        setTimeout(() => setKeyDown(false), 50);
+        setTimeout(() => setKeyDown(false), 17);
     }, [keyDown])
 
     return keyDown;
