@@ -1,20 +1,22 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
 // import Wall from '../Wall/index';
 import Ball from '../Ball/index';
 import Player from '../Player/index';
 import useKeyboard from '../../utils/Keyboard';
-// import useBallPosition from '../../utils/BallPosition';
-import { useSelector } from 'react-redux';
+import useFrameLoop from '../../utils/FrameLoop';
 
 import './styles.scss';
 
 function Board() {
-    const pauseRef = useRef(true);
-    const ballRef = useRef();
-    const keyDown = useKeyboard();
     const boardData = useSelector(state => state.board);
+    const ballData = useSelector(state => state.ball);
+    const [clock, setClock] = useState(0);
+    const [ballTop, setBallTop] = useState(boardData.topMaxPos - ballData.size);
+    const [ballLeft, setBallLeft] = useState((boardData.leftMaxPos - boardData.leftMinPos) / 2 - ballData.size);
+    const pauseRef = useRef(true);
+    const keyDown = useKeyboard();
     const { topMinPos, topMaxPos, leftMinPos, leftMaxPos } = boardData;
-    // const [ballTop, ballLeft] = useBallPosition(ballRef);
 
     useEffect(() => {
         if ( keyDown === 'Space' ) {
@@ -24,6 +26,10 @@ function Board() {
         }
     }, [keyDown])
 
+    useFrameLoop((time) => {
+        setClock(time);
+    });
+
     return (
         <div className="center-board">
             <div className="board-container" style={{
@@ -32,7 +38,7 @@ function Board() {
             }}>
                 <div id="board">
                     {/* <Wall /> */}
-                    <Ball ballRef={ballRef} pauseRef={pauseRef} />
+                    <Ball clock={clock} top={ballTop} setTop={setBallTop} left={ballLeft} setLeft={setBallLeft} />
                 </div>
                 <Player pauseRef={pauseRef} />
             </div>
