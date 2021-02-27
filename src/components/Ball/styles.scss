@@ -1,4 +1,6 @@
+@import '../../scss/variables.scss';
+
 #ball {
-    background-color: red;
+    background-color: $red;
     position: absolute;
 }

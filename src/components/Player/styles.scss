@@ -1,5 +1,7 @@
+@import '../../scss/variables.scss';
+
 #player {
-    background-color: green;
+    background-color: $green;
     height: 20px;
     width: 100px;
     position: absolute;

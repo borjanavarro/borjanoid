@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useSelector } from 'react-redux';
-import useKeyboard from '../../utils/Keyboard';
 
 import './styles.scss';
 
-function Player({ clock, ballTop, setBallTop, ballLeft, vector }) {
+function Player({ clock, ballTop, setBallTop, ballLeft, vector, keyDown }) {
     const boardData = useSelector(state => state.board);
     const ballData = useSelector(state => state.ball);
     const playerData = useSelector(state => state.player);
@@ -12,7 +11,6 @@ function Player({ clock, ballTop, setBallTop, ballLeft, vector }) {
     leftMaxPos = leftMaxPos - playerData.width;
     const [position, setPosition] = useState(leftMaxPos / 2);
     const player = useRef();
-    const keyDown = useKeyboard();
 
     useEffect( () => {
         if ( keyDown ) {
