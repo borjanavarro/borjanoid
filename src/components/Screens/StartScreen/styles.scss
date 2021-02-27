@@ -1,0 +1,74 @@
+@import '../../../scss/variables.scss';
+
+body {
+    background: url('../../../images/old_moon.png') repeat;
+}
+
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.center-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 100px;
+    height: calc(100vh - 100px);
+    font-family: 'Arcade';
+
+    h1 {
+        color: $yellow;
+        font-size: 8em;
+        text-transform: uppercase;
+        margin: 0 0 20px;
+        font-weight: normal;
+        line-height: 0.3;
+        padding-top: 35px;
+    }
+
+    h3 {
+        font-weight: normal;
+        font-size: 2.5em;
+        color: $orange;
+        margin: 0;
+    }
+
+    button {
+        font-family: 'Arcade';
+        font-size: 2em;
+        margin-top: 100px;
+        border-top: 0;
+        background: none;
+        border: none;
+        color: $red;
+        cursor: pointer;
+
+        &:hover {
+            font-size: 2.5em;
+        }
+    }
+
+    .bottom {
+        display: flex;
+        margin-top: auto;
+
+        h5 {
+            font-family: 'Invasion 2000';
+            font-size: 1em;
+            color: $gray;
+        }
+
+        a {
+            font-family: 'Invasion 2000';
+            font-size: 1em;
+            color: rgb(100, 100, 100);
+            text-decoration: none;
+            
+            &:hover {
+                color: $red;
+            }
+        }
+    }
+}

@@ -1,35 +1,36 @@
 import React, { useState, useEffect } from 'react';
 import StartScreen from './StartScreen/index';
 import EndScreen from './EndScreen/index';
-import Board from '../Board/index';
+import GameScreen from './GameScreen/index';
 import useKeyboard from '../../utils/Keyboard';
+import * as SCREENS from './constants'; 
 
 function Screens() {
-    const [screen, setScreen] = useState(1);
+    const [screen, setScreen] = useState(SCREENS.START_SCREEN);
     const keyDown = useKeyboard();
 
     useEffect(() => {
-        if ( screen === 1 ) {
+        if ( screen === SCREENS.START_SCREEN ) {
             if ( keyDown === 'Digit1') {
-                setScreen(1);
+                setScreen(SCREENS.START_SCREEN);
             } else if (keyDown === 'Digit2') {
-                setScreen(2);
+                setScreen(SCREENS.GAME_SCREEN);
             }
         }
     }, [keyDown, screen]);
 
     switch (screen) {
-        case 1:
+        case SCREENS.START_SCREEN:
             return (
-                <StartScreen />
+                <StartScreen setScreen={setScreen} />
             );
         
-        case 2:
+        case SCREENS.GAME_SCREEN:
             return (
-                <Board />
+                <GameScreen keyDown={keyDown} />
             );
 
-        case 3:
+        case SCREENS.END_SCREEN:
             return (
                 <EndScreen />
             );

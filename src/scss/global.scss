@@ -1,5 +1,16 @@
+@font-face {
+    font-family: 'Arcade';
+    src: url('../fonts/arcade/ARCADE.TTF');
+}
+
+@font-face {
+    font-family: 'Invasion 2000';
+    src: url('../fonts/invasion2000/INVASION2000.TTF');
+}
+
 * {
     box-sizing: border-box;
+    outline: none;
 }
 
 body {
