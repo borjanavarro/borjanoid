@@ -36,8 +36,8 @@ function Player({ clock, ballTop, setBallTop, ballLeft, vector, keyDown }) {
         if ( ballTop + ballData.size > topMaxPos ) {
             const playerLeft = parseInt(player.current.style.left, 10);
 
-            if ( ballLeft >= playerLeft &&  ballLeft <= playerLeft + playerData.width ) {
                 setBallTop(topMaxPos - ballData.size);
+            if ( ballLeft >= playerLeft - ballData.size && ballLeft <= playerLeft + playerData.width ) {
                 vector.current = {'top': -vector.current.top, 'left': vector.current.left};
             } else {
                 // gameLost();
