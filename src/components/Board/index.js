@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
-// import Wall from '../Wall/index';
+import Wall from '../Wall/index';
 import Ball from '../Ball/index';
 import Player from '../Player/index';
 import useFrameLoop from '../../utils/FrameLoop';
@@ -29,7 +29,14 @@ function Board({ keyDown }) {
                 height: topMaxPos - topMinPos
             }}>
                 <div id="board">
-                    {/* <Wall /> */}
+                    <Wall 
+                        clock={clock} 
+                        ballTop={ballTop} 
+                        setBallTop={setBallTop} 
+                        ballLeft={ballLeft} 
+                        setBallLeft={setBallLeft}
+                        vector={vector}
+                    />
                     <Ball 
                         clock={clock}
                         top={ballTop} 
