@@ -19,19 +19,19 @@ function Brick({clock, brickTop, brickLeft, ballRef, vector, collisionDetected, 
         const prevBallLeft = ballRef.current.left;
 
         if ( prevBallTop < topMaxPos && prevBallTop > topMinPos && prevBallLeft > leftMinPos && prevBallLeft < leftMaxPos ) {
-            const topDist = topMaxPos - prevBallTop;
-            const leftDist =  leftMaxPos - prevBallLeft;
-            
-            if ( topDist > leftDist ) {
-                // colision por la derecha del ladrillo
-                ballRef.current.left = leftMaxPos;
-                vector.current = {'top': vector.current.top, 'left': -vector.current.left};
-            } else {
+            const distFromBottom = topMaxPos - prevBallTop;
+            const distFromRight = leftMaxPos - prevBallLeft;
+
+            if ( distFromBottom < distFromRight ) {
                 // colision por la inferior del ladrillo
                 ballRef.current.top = topMaxPos;
                 vector.current = {'top': -vector.current.top, 'left': vector.current.left};
+            } else {
+                // colision por la derecha del ladrillo
+                ballRef.current.top = leftMaxPos;
+                vector.current = {'top': vector.current.top, 'left': -vector.current.left};
             }
-            
+
             return true;
         }
 
@@ -43,17 +43,17 @@ function Brick({clock, brickTop, brickLeft, ballRef, vector, collisionDetected, 
         const prevBallRight = ballRef.current.left + ballData.size;
 
         if ( prevBallTop < topMaxPos && prevBallTop > topMinPos && prevBallRight > leftMinPos && prevBallRight < leftMaxPos ) {
-            const topDist = topMaxPos - prevBallTop;
-            const rightDist = prevBallRight - topMinPos;
-            
-            if ( topDist > rightDist ) {
-                // colision por la izquierda del ladrillo
-                ballRef.current.left = leftMaxPos;
-                vector.current = {'top': vector.current.top, 'left': -vector.current.left};
-            } else {
+            const distFromBottom = topMaxPos - prevBallTop;
+            const distFromLeft = prevBallRight - leftMinPos;
+
+            if ( distFromBottom < distFromLeft ) {
                 // colision por la inferior del ladrillo
                 ballRef.current.top = topMaxPos;
                 vector.current = {'top': -vector.current.top, 'left': vector.current.left};
+            } else {
+                // colision por la izquierda del ladrillo
+                ballRef.current.top = leftMaxPos - ballData.size;
+                vector.current = {'top': vector.current.top, 'left': -vector.current.left};
             }
             
             return true;
@@ -67,17 +67,17 @@ function Brick({clock, brickTop, brickLeft, ballRef, vector, collisionDetected, 
         const prevBallLeft = ballRef.current.left;
 
         if ( prevBallBottom > topMinPos && prevBallBottom < topMaxPos && prevBallLeft > leftMinPos && prevBallLeft < leftMaxPos ) {
-            const bottomDist = prevBallBottom - leftMinPos;
-            const leftDist =  leftMaxPos - prevBallLeft;
-            
-            if ( bottomDist > leftDist ) {
-                // colision por la derecha del ladrillo
-                ballRef.current.left = leftMinPos + ballData.size;
-                vector.current = {'top': vector.current.top, 'left': -vector.current.left};
-            } else {
+            const distFromTop = prevBallBottom - topMinPos;
+            const distFromRight = leftMaxPos - prevBallLeft;
+
+            if ( distFromTop < distFromRight ) {
                 // colision por la superior del ladrillo
-                ballRef.current.top = topMinPos + ballData.size;
+                ballRef.current.top = topMinPos - ballData.size;
                 vector.current = {'top': -vector.current.top, 'left': vector.current.left};
+            } else {
+                // colision por la izquierda del ladrillo
+                ballRef.current.top = leftMaxPos;
+                vector.current = {'top': vector.current.top, 'left': -vector.current.left};
             }
             
             return true;
@@ -91,17 +91,17 @@ function Brick({clock, brickTop, brickLeft, ballRef, vector, collisionDetected, 
         const prevBallRight = ballRef.current.left + ballData.size;
 
         if ( prevBallBottom > topMinPos && prevBallBottom < topMaxPos && prevBallRight > leftMinPos && prevBallRight < leftMaxPos ) {
-            const bottomDist = leftMinPos - prevBallBottom;
-            const rightDist =  topMinPos - prevBallRight;
-            
-            if ( bottomDist > rightDist ) {
-                // colision por la izquierda del ladrillo
-                ballRef.current.left = leftMinPos + ballData.size;
-                vector.current = {'top': vector.current.top, 'left': -vector.current.left};
-            } else {
+            const distFromTop = prevBallBottom - topMinPos;
+            const distFromLeft = prevBallRight - leftMinPos;
+
+            if ( distFromTop < distFromLeft ) {
                 // colision por la superior del ladrillo
-                ballRef.current.top = topMinPos + ballData.size;
+                ballRef.current.top = topMinPos - ballData.size;
                 vector.current = {'top': -vector.current.top, 'left': vector.current.left};
+            } else {
+                // colision por la izquierda del ladrillo
+                ballRef.current.top = leftMinPos - ballData.size;
+                vector.current = {'top': vector.current.top, 'left': -vector.current.left};
             }
             
             return true;
@@ -135,7 +135,7 @@ function Brick({clock, brickTop, brickLeft, ballRef, vector, collisionDetected, 
         if ( collisionDetected ) {
             setTimeout(() => {
                 setCollisionDetected(false);
-            }, 17)
+            }, 68)
         }
     }, [collisionDetected, setCollisionDetected])
 
