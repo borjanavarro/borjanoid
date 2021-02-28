@@ -35,10 +35,19 @@ body {
         margin: 0;
     }
 
+    .instructions {
+        font-family: 'Invasion 2000';
+        color: $black;
+        font-size: 1em;
+    }
+
     button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
         font-family: 'Arcade';
         font-size: 2em;
-        margin-top: 100px;
+        margin-top: 80px;
         border-top: 0;
         background: none;
         border: none;

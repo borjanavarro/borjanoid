@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import StartScreen from './StartScreen/index';
 import EndScreen from './EndScreen/index';
 import GameScreen from './GameScreen/index';
+import WaitScreen from './WaitScreen/index';
 import useKeyboard from '../../utils/Keyboard';
 import * as SCREENS from './constants'; 
 
@@ -23,6 +24,11 @@ function Screens() {
         case SCREENS.START_SCREEN:
             return (
                 <StartScreen setScreen={setScreen} />
+            );
+
+        case SCREENS.WAIT_SCREEN:
+            return (
+                <WaitScreen setScreens={setScreen} />
             );
         
         case SCREENS.GAME_SCREEN:

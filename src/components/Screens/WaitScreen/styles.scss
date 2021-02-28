@@ -1,0 +1,16 @@
+@import '../../../scss/variables.scss';
+
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+
+    .counter {
+        font-family: 'Arcade';
+        font-size: 20em;
+        $opacity: 0;
+        color: $yellow;
+        transition: all 0.8s;
+    }
+}
