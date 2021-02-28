@@ -12,10 +12,11 @@ function Board({ keyDown }) {
     const boardData = useSelector(state => state.board);
     const ballData = useSelector(state => state.ball);
     const [clock, setClock] = useState(0);
-    const [ballTop, setBallTop] = useState(boardData.topMaxPos - ballData.size);
-    const [ballLeft, setBallLeft] = useState((boardData.leftMaxPos - boardData.leftMinPos) / 2 - ballData.size);
     const vector = useRef( generateRandomVector() );
-    
+    const ballRef = useRef({
+        top: boardData.topMaxPos - ballData.size,
+        left: (boardData.leftMaxPos - boardData.leftMinPos) / 2 - ballData.size
+    });
     const { topMinPos, topMaxPos, leftMinPos, leftMaxPos } = boardData;
 
     useFrameLoop((time) => {
@@ -31,27 +32,18 @@ function Board({ keyDown }) {
                 <div id="board">
                     <Wall 
                         clock={clock} 
-                        ballTop={ballTop} 
-                        setBallTop={setBallTop} 
-                        ballLeft={ballLeft} 
-                        setBallLeft={setBallLeft}
+                        ballRef={ballRef}
                         vector={vector}
                     />
                     <Ball 
                         clock={clock}
-                        top={ballTop} 
-                        setTop={setBallTop} 
-                        left={ballLeft} 
-                        setLeft={setBallLeft} 
+                        ballRef={ballRef}
                         vector={vector}
                     />
                 </div>
                 <Player 
                     clock={clock}
-                    ballTop={ballTop}
-                    setBallTop={setBallTop}
-                    ballLeft={ballLeft}
-                    setBallLeft={setBallLeft}
+                    ballRef={ballRef}
                     vector={vector}
                     keyDown={keyDown}
                 />

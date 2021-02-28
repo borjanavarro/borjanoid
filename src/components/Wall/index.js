@@ -2,22 +2,23 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import Brick from '../Brick/index';
 
-function Wall({ clock, ballTop, setBallTop, ballLeft, setBallLeft, vector }) {
-    const ballData = useSelector(state => state.wall);
+function Wall({ clock, ballRef, vector }) {
+    const wallData = useSelector(state => state.wall);
     const brickData = useSelector(state => state.brick);
     const [bricks, setBricks] = useState([]);
+    const [collisionDetected, setCollisionDetected] = useState(false);
 
     useEffect(() => {
-        let top = ballData.topOffset;
-        let left = ballData.leftOffset;
+        let top = wallData.topOffset;
+        let left = wallData.leftOffset;
         const aux = [];
 
-        for (let i = 1; i <= 10; i++) { 
+        for (let i = 1; i <= 36; i++) { 
             aux.push({ top, left});
             left = left + brickData.width;
-            if ( i % 10 === 0 ) {
+            if ( i % 6 === 0 ) {
                 top = top + brickData.height;
-                left = ballData.leftOffset;
+                left = wallData.leftOffset;
             }
         }
         setBricks(aux);
@@ -31,11 +32,10 @@ function Wall({ clock, ballTop, setBallTop, ballLeft, setBallLeft, vector }) {
                     clock={clock}
                     brickTop={elem.top} 
                     brickLeft={elem.left} 
-                    ballTop={ballTop}
-                    setBallTop={setBallTop}
-                    ballLeft={ballLeft}
-                    setBallLeft={setBallLeft}
+                    ballRef={ballRef}
                     vector={vector}
+                    collisionDetected={collisionDetected}
+                    setCollisionDetected={setCollisionDetected}
                     />
         })
     );

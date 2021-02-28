@@ -2,7 +2,7 @@ import { UPDATE_DATA } from '../actions/actionTypes';
 
 const initialState = {
     topOffset: 80,
-    leftOffset: 0
+    leftOffset: 80
 };
 
 function reducer(state = initialState, action) {

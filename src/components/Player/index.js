@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 
 import './styles.scss';
 
-function Player({ clock, ballTop, setBallTop, ballLeft, vector, keyDown }) {
+function Player({ clock, /*ballTop, setBallTop, ballLeft,*/ vector, keyDown, ballRef }) {
     const boardData = useSelector(state => state.board);
     const ballData = useSelector(state => state.ball);
     const playerData = useSelector(state => state.player);
@@ -33,17 +33,21 @@ function Player({ clock, ballTop, setBallTop, ballLeft, vector, keyDown }) {
     }, [keyDown, playerData.velocity, leftMaxPos, leftMinPos ]);
 
     const collision = useCallback(() => {
+        const ballTop = ballRef.current.top;
+        const ballLeft = ballRef.current.left;
+
         if ( ballTop + ballData.size > topMaxPos ) {
             const playerLeft = parseInt(player.current.style.left, 10);
 
-                setBallTop(topMaxPos - ballData.size);
             if ( ballLeft >= playerLeft - ballData.size && ballLeft <= playerLeft + playerData.width ) {
+                ballRef.current.top = topMaxPos - ballData.size;
                 vector.current = {'top': -vector.current.top, 'left': vector.current.left};
             } else {
                 // gameLost();
             }
         }
-    }, [ballTop, ballLeft, setBallTop, topMaxPos, vector, ballData.size, playerData.width])
+    }, [ topMaxPos, vector, ballData.size, playerData.width, ballRef])
+// }, [ballTop, ballLeft, setBallTop, topMaxPos, vector, ballData.size, playerData.width])
 
     useEffect(() => {
         collision();

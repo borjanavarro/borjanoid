@@ -4,7 +4,7 @@ import { black } from '../../utils/constants';
 
 import './styles.scss';
 
-function Brick({clock, brickTop, brickLeft, ballTop, setBallTop, ballLeft, setBallLeft, vector }) {
+function Brick({clock, brickTop, brickLeft, ballRef, vector, collisionDetected, setCollisionDetected }) {
     const [destroyed, setDestroyed] = useState(false);
     const brickRef = useRef();
     const brickData = useSelector(state => state.brick);
@@ -14,175 +14,130 @@ function Brick({clock, brickTop, brickLeft, ballTop, setBallTop, ballLeft, setBa
     const leftMinPos = brickLeft;
     const leftMaxPos = brickLeft + brickData.width;
 
-    const timer = useRef(0);
-    const [flag, setFlag] = useState(false)
+    const ballTopLeftisCollision = useCallback(() => {
+        const prevBallTop = ballRef.current.top;
+        const prevBallLeft = ballRef.current.left;
 
-    const topLeftisCollision = useCallback(() => {
-        const prevBallTop = ballTop;
-        const prevBallLeft = ballLeft;
-        // if ( prevBallTop < topMaxPos && prevBallLeft > leftMinPos && prevBallLeft < leftMaxPos ) {
-        //     const bottomDist = topMaxPos - prevBallTop;
-        //     // const topDist = prevBallTop - leftMinPos;
-        //     const leftDist = prevBallLeft - leftMinPos;
-        //     const rightDist = leftMaxPos - prevBallLeft;
+        if ( prevBallTop < topMaxPos && prevBallTop > topMinPos && prevBallLeft > leftMinPos && prevBallLeft < leftMaxPos ) {
+            const topDist = topMaxPos - prevBallTop;
+            const leftDist =  leftMaxPos - prevBallLeft;
             
-        //     // if ( bottomDist < topDist ) {
-        //     //     // collision inferior
-        //         if ( leftDist < rightDist ) {
-        //             // colision izq
-        //             if ( bottomDist < leftDist ) {
-        //                 // colision inferior
-        //                 setBallTop(topMaxPos);
-        //                 vector.current = {'top': -vector.current.top, 'left': vector.current.left};
-        //             } else {
-        //                 // colision izquierda
-        //                 setBallLeft(leftMaxPos);
-        //                 vector.current = {'top': vector.current.top, 'left': -vector.current.left};
-        //             }
-        //         } else {
-        //             // colision derecha
-        //             if ( bottomDist < rightDist ) {
-        //                 // colsion 
-        //                 if ( bottomDist < leftDist ) {
-        //                     // colision inferior
-        //                     setBallTop(topMaxPos);
-        //                     vector.current = {'top': -vector.current.top, 'left': vector.current.left};
-        //                 } else {
-        //                     // colision izquierda
-        //                     setBallLeft(leftMaxPos);
-        //                     vector.current = {'top': vector.current.top, 'left': -vector.current.left};
-        //                 }
-        //             }
-        //         }
-        //     return true;
-        // }
-
-        // return false;
-        if ( prevBallTop < topMaxPos ) {
-            setBallTop(topMaxPos);
-            vector.current = {'top': -vector.current.top, 'left': vector.current.left};
+            if ( topDist > leftDist ) {
+                // colision por la derecha del ladrillo
+                ballRef.current.left = leftMaxPos;
+                vector.current = {'top': vector.current.top, 'left': -vector.current.left};
+            } else {
+                // colision por la inferior del ladrillo
+                ballRef.current.top = topMaxPos;
+                vector.current = {'top': -vector.current.top, 'left': vector.current.left};
+            }
+            
             return true;
         }
 
         return false;
-    }, [ballLeft, ballTop, leftMaxPos, leftMinPos, setBallLeft, setBallTop, topMaxPos, topMinPos, vector]);
+    }, [leftMaxPos, leftMinPos, topMaxPos, topMinPos, vector, ballRef]);
 
-    // const topLeftisCollision = useCallback(() => {
-    //     const prevBallTop = ballTop;
-    //     const prevBallLeft = ballLeft;
-    //     if ( prevBallTop > topMinPos && prevBallTop < topMaxPos && prevBallLeft > leftMinPos && prevBallLeft < leftMaxPos ) {
-    //         if ( topMaxPos - prevBallTop > prevBallTop - leftMinPos ) {
-    //             // colision inferior
-    //             setBallTop(topMaxPos);
-    //             // vector: top cambia de signo
-    //             vector.current = {'top': -vector.current.top, 'left': vector.current.left};
+    const ballTopRightisCollision = useCallback(() => {
+        const prevBallTop = ballRef.current.top;
+        const prevBallRight = ballRef.current.left + ballData.size;
 
-    //         } else {
-    //             // colision izquierda
-    //             setBallLeft(leftMaxPos);
-    //             // vector: left cambia de signo
-    //             vector.current = {'top': vector.current.top, 'left': -vector.current.left};
-    //         }
+        if ( prevBallTop < topMaxPos && prevBallTop > topMinPos && prevBallRight > leftMinPos && prevBallRight < leftMaxPos ) {
+            const topDist = topMaxPos - prevBallTop;
+            const rightDist = prevBallRight - topMinPos;
             
-    //         return true;
-    //     }
-
-    //     return false;
-    // }, [ballLeft, ballTop, leftMaxPos, leftMinPos, setBallLeft, setBallTop, topMaxPos, topMinPos, vector]);
-
-    // const topRightisCollision = useCallback(() => {
-    //     const prevBallTop = ballTop;
-    //     const prevBallRight = ballLeft + ballData.width;
-    //     if ( prevBallTop > topMinPos && prevBallTop < topMaxPos && prevBallRight < leftMinPos && prevBallRight < leftMaxPos ) {
-    //         if ( prevBallTop - topMaxPos > prevBallRight - leftMaxPos ) {
-    //             // colision inferior
-    //             setBallTop(topMaxPos);
-    //             // vector: top cambia de signo
-    //             vector.current = {'top': -vector.current.top, 'left': vector.current.left};
-
-    //         } else {
-    //             // colision derecha
-    //             setBallLeft(leftMinPos - ballData.size);
-    //             // vector: left cambia de signo
-    //             vector.current = {'top': vector.current.top, 'left': -vector.current.left};
-    //         }
+            if ( topDist > rightDist ) {
+                // colision por la izquierda del ladrillo
+                ballRef.current.left = leftMaxPos;
+                vector.current = {'top': vector.current.top, 'left': -vector.current.left};
+            } else {
+                // colision por la inferior del ladrillo
+                ballRef.current.top = topMaxPos;
+                vector.current = {'top': -vector.current.top, 'left': vector.current.left};
+            }
             
-    //         return true;
-    //     }
-    // }, [ballData.size, ballData.width, ballLeft, ballTop, leftMaxPos, leftMinPos, setBallLeft, setBallTop, topMaxPos, topMinPos, vector]);
-
-    // const bottomLeftisCollision = useCallback(() => {
-    //     const prevBallBottom = ballTop + ballData.height;
-    //     const prevBallLeft = ballLeft;
-    //     if ( prevBallBottom > topMinPos && prevBallBottom < topMaxPos && prevBallLeft < leftMinPos && prevBallLeft < leftMaxPos ) {
-    //         if ( prevBallBottom - topMinPos > prevBallLeft - leftMaxPos ) {
-    //             // colision superior
-    //             setBallTop(topMinPos - ballData.size);
-    //             // vector: top cambia de signo
-    //             vector.current = {'top': -vector.current.top, 'left': vector.current.left};
-
-    //         } else {
-    //             // colision lateral
-    //             setBallLeft(leftMaxPos);
-    //             // vector: left cambia de signo
-    //             vector.current = {'top': vector.current.top, 'left': -vector.current.left};
-    //         }
-            
-    //         return true;
-    //     }
-
-    //     return false;
-    // }, [ballData.height, ballData.size, ballLeft, ballTop, leftMaxPos, leftMinPos, setBallLeft, setBallTop, topMaxPos, topMinPos, vector]);
-
-    // const bottomRightisCollision = useCallback(() => {
-    //     const prevBallBottom = ballTop + ballData.size;
-    //     const prevBallRight = ballLeft + ballData.width;
-    //     if ( prevBallBottom > topMinPos && prevBallBottom < topMaxPos && prevBallRight > leftMinPos && prevBallRight < leftMaxPos ) {
-    //         if ( prevBallBottom - topMinPos > prevBallRight - leftMinPos ) {
-    //             // colision superior
-    //             setBallTop(topMinPos - ballData.size);
-    //             // vector: top cambia de signo
-    //             vector.current = {'top': -vector.current.top, 'left': vector.current.left};
-
-
-    //         } else {
-    //             // colision izquierda
-    //             setBallLeft(leftMinPos - ballData.size);
-    //             // vector: left cambia de signo
-    //             vector.current = {'top': vector.current.top, 'left': -vector.current.left};
-
-    //         }
-            
-    //         return true;
-    //     }
-
-    //     return false;
-    // }, [ballData.width, ballData.size, ballLeft, ballTop, leftMaxPos, leftMinPos, setBallLeft, setBallTop, topMaxPos, topMinPos, vector]);
-
-    const isCollision = useCallback(() => {
-        if ( topLeftisCollision() && !destroyed ) return true;
-        // if ( topRightisCollision() && !destroyed ) return true;
-        // if ( bottomLeftisCollision() && !destroyed ) return true;
-        // if ( bottomRightisCollision() && !destroyed ) return true;
+            return true;
+        }
 
         return false;
-    // }, [bottomLeftisCollision, bottomRightisCollision, topLeftisCollision, topRightisCollision, destroyed]);
-}, [topLeftisCollision, destroyed]);
+    }, [ballData.size, leftMaxPos, leftMinPos, topMaxPos, topMinPos, vector, ballRef]);
+
+    const ballBottomLeftisCollision = useCallback(() => {
+        const prevBallBottom = ballRef.current.top + ballData.size;
+        const prevBallLeft = ballRef.current.left;
+
+        if ( prevBallBottom > topMinPos && prevBallBottom < topMaxPos && prevBallLeft > leftMinPos && prevBallLeft < leftMaxPos ) {
+            const bottomDist = prevBallBottom - leftMinPos;
+            const leftDist =  leftMaxPos - prevBallLeft;
+            
+            if ( bottomDist > leftDist ) {
+                // colision por la derecha del ladrillo
+                ballRef.current.left = leftMinPos + ballData.size;
+                vector.current = {'top': vector.current.top, 'left': -vector.current.left};
+            } else {
+                // colision por la superior del ladrillo
+                ballRef.current.top = topMinPos + ballData.size;
+                vector.current = {'top': -vector.current.top, 'left': vector.current.left};
+            }
+            
+            return true;
+        }
+
+        return false;
+    }, [ballData.size, topMaxPos, topMinPos, leftMinPos, leftMaxPos, vector, ballRef]);
+
+    const ballBottomRightisCollision = useCallback(() => {
+        const prevBallBottom = ballRef.current.top + ballData.size;
+        const prevBallRight = ballRef.current.left + ballData.size;
+
+        if ( prevBallBottom > topMinPos && prevBallBottom < topMaxPos && prevBallRight > leftMinPos && prevBallRight < leftMaxPos ) {
+            const bottomDist = leftMinPos - prevBallBottom;
+            const rightDist =  topMinPos - prevBallRight;
+            
+            if ( bottomDist > rightDist ) {
+                // colision por la izquierda del ladrillo
+                ballRef.current.left = leftMinPos + ballData.size;
+                vector.current = {'top': vector.current.top, 'left': -vector.current.left};
+            } else {
+                // colision por la superior del ladrillo
+                ballRef.current.top = topMinPos + ballData.size;
+                vector.current = {'top': -vector.current.top, 'left': vector.current.left};
+            }
+            
+            return true;
+        }
+
+        return false;
+    }, [ballData.size, topMaxPos, topMinPos, leftMinPos, leftMaxPos, vector, ballRef]);
+
+    const isCollision = useCallback(() => {
+        if ( !destroyed ) { 
+            if ( ballTopLeftisCollision() ) { return true; }
+            else if ( ballTopRightisCollision() ) { return true; }
+            else if ( ballBottomLeftisCollision() ) { return true; }
+            else if ( ballBottomRightisCollision() ) { return true; }
+        }
+        
+        return false;
+    }, [ballTopLeftisCollision, ballTopRightisCollision, ballBottomLeftisCollision, ballBottomRightisCollision, destroyed]);
 
     useEffect(() => {
-        if ( isCollision() ) {
-            // setDestroyed(true);
+        if ( !collisionDetected ) {
+            if ( isCollision() ) {
+                setCollisionDetected(true);
+                setDestroyed(true);
+            }
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [clock])
 
-    // useEffect(() => {
-    //     timer.current++;
-    //     if ( timer.current >= 60 ) {
-    //         timer.current = 0;
-    //         setFlag(flag ? false : true);
-    //     }
-    // }, [clock, timer, flag])
+    useEffect(() => {
+        if ( collisionDetected ) {
+            setTimeout(() => {
+                setCollisionDetected(false);
+            }, 17)
+        }
+    }, [collisionDetected, setCollisionDetected])
 
     return (
         <div className="brick-container" style={{
