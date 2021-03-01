@@ -3,13 +3,19 @@ import { useSelector } from 'react-redux';
 
 import './styles.scss';
 
-function Ball({ clock, ballRef, vector }) {
+function Ball({ clock, ballRef, vector, setEndGame }) {
     const elem = useRef();
     const boardData = useSelector(state => state.board);
     const ballData = useSelector(state => state.ball);
     let { topMinPos, topMaxPos, leftMinPos, leftMaxPos } = boardData;
     topMaxPos = topMaxPos - ballData.size;
     leftMaxPos = leftMaxPos - ballData.size;
+
+    const gameLost = useCallback(() => {
+        setTimeout(() => {
+            setEndGame({message: 'You lose', submessage: ''});
+        }, 500);
+    }, [setEndGame])
 
     const isThereCollision = useCallback((ballTop, ballLeft) => {
         if ( ballTop < topMinPos
@@ -28,7 +34,7 @@ function Ball({ clock, ballRef, vector }) {
             ballRef.current.top = topMinPos;
             vector.current = {'top': -vector.current.top, 'left': vector.current.left};
         } else if ( ballTop > topMaxPos ) {
-            // gameLost();
+            gameLost();
         } else if ( ballLeft < leftMinPos ) {
             ballRef.current.left = leftMinPos;
             vector.current = {'top': vector.current.top, 'left': -vector.current.left};
@@ -36,7 +42,7 @@ function Ball({ clock, ballRef, vector }) {
             ballRef.current.left = leftMaxPos;
             vector.current = {'top': vector.current.top, 'left': -vector.current.left};
         }
-    }, [topMinPos, topMaxPos, leftMinPos, leftMaxPos, vector, ballRef])
+    }, [topMinPos, topMaxPos, leftMinPos, leftMaxPos, vector, ballRef, gameLost])
 
     useEffect(() => {
         const prevTop = parseInt(elem.current.style.top, 10); 

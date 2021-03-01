@@ -8,17 +8,19 @@ import * as SCREENS from './constants';
 
 function Screens() {
     const [screen, setScreen] = useState(SCREENS.START_SCREEN);
+    const [endGame, setEndGame] = useState(false);
+    const [message, setMessage] = useState('');
+    const [submessage, setSubmessage] = useState('');
     const keyDown = useKeyboard();
 
     useEffect(() => {
-        if ( screen === SCREENS.START_SCREEN ) {
-            if ( keyDown === 'Digit1') {
-                setScreen(SCREENS.START_SCREEN);
-            } else if (keyDown === 'Digit2') {
-                setScreen(SCREENS.GAME_SCREEN);
-            }
+        if ( endGame ) {
+            setMessage(endGame.message);
+            setSubmessage(endGame.submessage);
+            setScreen(SCREENS.END_SCREEN);
+            setEndGame(false);
         }
-    }, [keyDown, screen]);
+    }, [endGame]);
 
     switch (screen) {
         case SCREENS.START_SCREEN:
@@ -33,12 +35,12 @@ function Screens() {
         
         case SCREENS.GAME_SCREEN:
             return (
-                <GameScreen keyDown={keyDown} />
+                <GameScreen keyDown={keyDown} setEndGame={setEndGame} />
             );
 
         case SCREENS.END_SCREEN:
             return (
-                <EndScreen />
+                <EndScreen setScreen={setScreen} message={message} submessage={submessage} />
             );
 
         default:

@@ -3,7 +3,7 @@ import Board from '../../Board/index';
 
 // import './styles.scss'
 
-function GameScreen({keyDown}) {
+function GameScreen({ keyDown, setEndGame }) {
     const [pause, setPause] = useState(false);
 
     useEffect(() => {
@@ -13,7 +13,7 @@ function GameScreen({keyDown}) {
     }, [keyDown, pause])
 
     return (
-        <Board keyDown={keyDown} />
+        <Board keyDown={keyDown} setEndGame={setEndGame} />
     );
 }
 

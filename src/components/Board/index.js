@@ -8,7 +8,7 @@ import { generateRandomVector } from '../../utils/functions';
 
 import './styles.scss';
 
-function Board({ keyDown }) {
+function Board({ keyDown, setEndGame }) {
     const boardData = useSelector(state => state.board);
     const ballData = useSelector(state => state.ball);
     const [clock, setClock] = useState(0);
@@ -34,11 +34,13 @@ function Board({ keyDown }) {
                         clock={clock} 
                         ballRef={ballRef}
                         vector={vector}
+                        setEndGame={setEndGame}
                     />
                     <Ball 
                         clock={clock}
                         ballRef={ballRef}
                         vector={vector}
+                        setEndGame={setEndGame}
                     />
                 </div>
                 <Player 

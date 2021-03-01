@@ -1,0 +1,42 @@
+@import '../../../scss/variables.scss';
+
+.end-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+
+    h1 {
+        font-family: 'Arcade';
+        font-size: 7em;
+        color: $black;
+        font-weight: normal;
+        text-transform: uppercase;
+        margin: 0;
+    }
+
+    h3 {
+        font-family: 'Arcade';
+        font-size: 3em;
+        color: $black;
+        font-weight: normal;
+        margin: 0;
+    }
+
+    button {
+        font-family: 'Arcade';
+        font-size: 2em;
+        margin-top: 60px;
+        border-top: 0;
+        background: none;
+        border: none;
+        color: $red;
+        cursor: pointer;
+        height: 50px;
+
+        &:hover {
+            font-size: 2.5em;
+        }
+    }
+}

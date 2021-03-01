@@ -1,12 +1,23 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import Brick from '../Brick/index';
 
-function Wall({ clock, ballRef, vector }) {
+function Wall({ clock, ballRef, vector, setEndGame }) {
     const wallData = useSelector(state => state.wall);
     const brickData = useSelector(state => state.brick);
     const [bricks, setBricks] = useState([]);
     const [collisionDetected, setCollisionDetected] = useState(false);
+    const bricksDestroyed = useRef(0)
+
+    const isGameWon = useCallback(() => {
+        bricksDestroyed.current++;
+        
+        if ( bricksDestroyed.current === bricks.length) {
+            setTimeout(() => {
+                setEndGame({message: 'You win', submessage: 'You are awesome'});
+            }, 1500);
+        }
+    }, [bricksDestroyed, bricks.length, setEndGame])
 
     useEffect(() => {
         let top = wallData.topOffset;
@@ -36,6 +47,7 @@ function Wall({ clock, ballRef, vector }) {
                     vector={vector}
                     collisionDetected={collisionDetected}
                     setCollisionDetected={setCollisionDetected}
+                    isGameWon={isGameWon}
                     />
         })
     );

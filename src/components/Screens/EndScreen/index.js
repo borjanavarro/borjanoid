@@ -1,12 +1,15 @@
 import React from 'react';
+import { START_SCREEN } from '../constants';
 
 import './styles.scss'
 
-function EndScreen() {
+function EndScreen({ setScreen, message, submessage}) {
 
     return (
-        <div className="container">
-            <div>Start screen</div>
+        <div className="end-container">
+            <h1>{ message}</h1>
+            <h3>{ submessage }</h3>
+            <button onClick={ () => setScreen(START_SCREEN) }>Retry</button>
         </div>
     );
 }
