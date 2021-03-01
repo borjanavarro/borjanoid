@@ -21,20 +21,42 @@ function Board({ keyDown, setEndGame }) {
     const { topMinPos, topMaxPos, leftMinPos, leftMaxPos } = boardData;
     const [counter, setCounter] = useState(0);
     const [points, setPoints] = useState(0);
+    const pause = useRef(false);
+    const [moveLeft, setMoveLeft] = useState(false);
+    const [moveRight, setMoveRight] = useState(false);
+
+    const keyHandler = (e) => {
+        if ( e.code === 'Escape' ) {
+            pause.current = pause.current ? false : true;
+        } else if ( e.code === 'ArrowLeft' ) {
+            if ( !pause.current ) setMoveLeft(true);
+        } else if ( e.code === 'ArrowRight' ) {
+            if ( !pause.current ) setMoveRight(true);
+        }
+    }
+
+    useEffect(() => {
+        document.addEventListener('keydown', (e) => keyHandler(e));
+
+        return document.removeEventListener('keydown', (e) => keyHandler(e));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     useEffect(() => {
         let interval;
 
         const main = () => {
             interval = setInterval(() => {
-                setCounter(counter + 1);
+                if ( !pause.current ) {
+                    setCounter(counter + 1);
+                }
             }, 1000)
         };
 
         main();
 
         return () => clearInterval(interval);
-    }, [counter])
+    }, [counter, pause])
 
     useFrameLoop((time) => {
         setClock(time);
@@ -47,6 +69,7 @@ function Board({ keyDown, setEndGame }) {
                 <p>Score: {points}</p>
                 <p>Time: {counter} s</p>
                 <p>press Esc to pause</p>
+                <p>{ pause.current ? 'PAUSE' : ''}</p>
             </div>
             <div className="board-container" style={{
                 width: leftMaxPos - leftMinPos,
@@ -67,13 +90,18 @@ function Board({ keyDown, setEndGame }) {
                         vector={vector}
                         points={points}
                         setEndGame={setEndGame}
+                        pause={pause}
                     />
                 </div>
                 <Player 
                     clock={clock}
                     ballRef={ballRef}
                     vector={vector}
-                    keyDown={keyDown}
+                    pause={pause}
+                    moveLeft={moveLeft}
+                    moveRight={moveRight}
+                    setMoveLeft={setMoveLeft}
+                    setMoveRight={setMoveRight}
                 />
             </div>
             <div className="info-container" style={{ width: LATERAL_COLUMNS_WIDTH }}></div>

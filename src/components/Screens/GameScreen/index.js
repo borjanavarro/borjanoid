@@ -1,19 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Board from '../../Board/index';
 
 // import './styles.scss'
 
-function GameScreen({ keyDown, setEndGame }) {
-    const [pause, setPause] = useState(false);
-
-    useEffect(() => {
-        if ( keyDown === 'Esc' ) {
-            setPause( pause ? false: true);
-        }
-    }, [keyDown, pause])
+function GameScreen({ setEndGame }) {
 
     return (
-        <Board keyDown={keyDown} setEndGame={setEndGame} />
+        <Board setEndGame={setEndGame} />
     );
 }
 

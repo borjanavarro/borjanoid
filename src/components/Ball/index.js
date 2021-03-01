@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 
 import './styles.scss';
 
-function Ball({ clock, ballRef, vector, points, setEndGame }) {
+function Ball({ clock, ballRef, vector, points, setEndGame, pause }) {
     const elem = useRef();
     const boardData = useSelector(state => state.board);
     const ballData = useSelector(state => state.ball);
@@ -45,14 +45,16 @@ function Ball({ clock, ballRef, vector, points, setEndGame }) {
     }, [topMinPos, topMaxPos, leftMinPos, leftMaxPos, vector, ballRef, gameLost])
 
     useEffect(() => {
-        const prevTop = parseInt(elem.current.style.top, 10); 
-        const prevLeft = parseInt(elem.current.style.left, 10);
+        if ( !pause.current ) {
+            const prevTop = parseInt(elem.current.style.top, 10); 
+            const prevLeft = parseInt(elem.current.style.left, 10);
 
-        if (isThereCollision(prevTop, prevLeft)) {
-            collision(prevTop, prevLeft);
-        } else {
-            ballRef.current.top = prevTop + vector.current.top * ballData.velocity;
-            ballRef.current.left = prevLeft + vector.current.left * ballData.velocity
+            if (isThereCollision(prevTop, prevLeft)) {
+                collision(prevTop, prevLeft);
+            } else {
+                ballRef.current.top = prevTop + vector.current.top * ballData.velocity;
+                ballRef.current.left = prevLeft + vector.current.left * ballData.velocity
+            }
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [clock]);

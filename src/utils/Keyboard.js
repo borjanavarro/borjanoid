@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 
-const useKeyboard = () => {
+const useKeyboard = (callback) => {
     const [keyDown, setKeyDown] = useState(false);
 
     useEffect(() => {

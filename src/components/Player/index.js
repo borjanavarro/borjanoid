@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 
 import './styles.scss';
 
-function Player({ clock, vector, keyDown, ballRef, pause }) {
+function Player({ clock, vector, ballRef, pause, moveLeft, moveRight, setMoveLeft, setMoveRight }) {
     const boardData = useSelector(state => state.board);
     const ballData = useSelector(state => state.ball);
     const playerData = useSelector(state => state.player);
@@ -12,17 +12,40 @@ function Player({ clock, vector, keyDown, ballRef, pause }) {
     const [position, setPosition] = useState(leftMaxPos / 2);
     const player = useRef();
 
-    useEffect( () => {
-        if ( keyDown ) {
-            const oldPosition = parseInt(player.current.style.left, 10);      
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // movePlayer = useCallback(e => {
+    //     if ( !pause.current ) {
+    //         const oldPosition = parseInt(player.current.style.left, 10);      
 
-            if ( keyDown === 'ArrowLeft' ) {
+    //         if ( e.code === 'ArrowLeft' ) {
+    //             if ( oldPosition > leftMinPos ) {
+    //                 setPosition( oldPosition - playerData.velocity );
+    //             } else {
+    //                 setPosition( leftMinPos );
+    //             }
+    //         } else if ( e.code === 'ArrowRight' ) {
+    //             if ( oldPosition < leftMaxPos ) {
+    //                 setPosition( oldPosition + playerData.velocity );
+    //             } else {
+    //                 setPosition( leftMaxPos );
+    //             }
+    //         }
+    //     }
+    // },  [])
+
+    useEffect(() => {
+        if ( !pause.current ) {
+            const oldPosition = parseInt(player.current.style.left, 10);
+
+            if ( moveLeft ) {
+                setMoveLeft(false);
                 if ( oldPosition > leftMinPos ) {
                     setPosition( oldPosition - playerData.velocity );
                 } else {
                     setPosition( leftMinPos );
                 }
-            } else if ( keyDown === 'ArrowRight' ) {
+            } else if ( moveRight ) {
+                setMoveRight(false);
                 if ( oldPosition < leftMaxPos ) {
                     setPosition( oldPosition + playerData.velocity );
                 } else {
@@ -30,7 +53,13 @@ function Player({ clock, vector, keyDown, ballRef, pause }) {
                 }
             }
         }
-    }, [keyDown, playerData.velocity, leftMaxPos, leftMinPos ]);
+    }, [moveLeft, moveRight, setMoveLeft, setMoveRight, leftMinPos, leftMaxPos, pause, playerData.velocity])
+
+    // useEffect(() => {
+    //     window.addEventListener('keydown', movePlayer);
+
+    //     return window.removeEventListener('keydown', movePlayer);
+    // }, [movePlayer])
 
     const collision = useCallback(() => {
         const ballTop = ballRef.current.top;
