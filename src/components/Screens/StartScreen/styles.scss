@@ -17,15 +17,21 @@ body {
     margin-top: 100px;
     height: calc(100vh - 100px);
     font-family: 'Arcade';
+    max-width: 100%;
+    text-align: center;
 
     h1 {
         color: $yellow;
-        font-size: 8em;
+        font-size: 5em;
         text-transform: uppercase;
         margin: 0 0 20px;
         font-weight: normal;
         line-height: 0.3;
         padding-top: 35px;
+
+        @media (min-width: 768px) {
+            font-size: 8em;
+        }
     }
 
     h3 {
@@ -45,6 +51,7 @@ body {
         font-family: 'Arcade';
         font-size: 2em;
         margin-top: 80px;
+        margin-bottom: 0;
         border-top: 0;
         background: none;
         border: none;
@@ -57,9 +64,14 @@ body {
         }
     }
 
+    .error {
+        margin: 0;
+    }
+
     .bottom {
         display: flex;
         margin-top: auto;
+        margin-bottom: 50px;
 
         h5 {
             font-family: 'Invasion 2000';
