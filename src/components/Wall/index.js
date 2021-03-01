@@ -14,7 +14,7 @@ function Wall({ clock, ballRef, vector, setEndGame }) {
         if ( bricksDestroyed.current === bricks.length) {
             setTimeout(() => {
                 setEndGame({message: 'You win', submessage: 'You are awesome'});
-            }, 1500);
+            }, 1000);
         }
     }, [bricksDestroyed, bricks.length, setEndGame])
 
