@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { WAIT_SCREEN } from '../constants';
+import { LATERAL_COLUMNS_WIDTH } from '../../../utils/constants';
 
 import './styles.scss'
 
@@ -11,7 +12,7 @@ function StartScreen({ setScreen }) {
     let width = boardData.leftMaxPos - boardData.leftMinPos;
 
     const startButton = () => {
-        if ( window.innerHeight > height && window.innerWidth > width + 2 * 280 ) {
+        if ( window.innerHeight > height && window.innerWidth > width + 2 * LATERAL_COLUMNS_WIDTH ) {
             setScreen(WAIT_SCREEN)
         } else {
             setMessage("Your device hasn't enough resolution to play this game");

@@ -4,7 +4,7 @@ import { black } from '../../utils/constants';
 
 import './styles.scss';
 
-function Brick({clock, brickTop, brickLeft, ballRef, vector, isGameWon }) {
+function Brick({clock, brickTop, brickLeft, ballRef, vector, points, setPoints, isGameWon }) {
     const [destroyed, setDestroyed] = useState(false);
     const brickData = useSelector(state => state.brick);
     const ballData = useSelector(state => state.ball);
@@ -122,6 +122,7 @@ function Brick({clock, brickTop, brickLeft, ballRef, vector, isGameWon }) {
 
     useEffect(() => {
         if ( isCollision() ) {
+            setPoints(points + 1000);
             setDestroyed(true);
             isGameWon();
         }

@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 
 import './styles.scss';
 
-function Ball({ clock, ballRef, vector, setEndGame }) {
+function Ball({ clock, ballRef, vector, points, setEndGame }) {
     const elem = useRef();
     const boardData = useSelector(state => state.board);
     const ballData = useSelector(state => state.ball);
@@ -13,9 +13,9 @@ function Ball({ clock, ballRef, vector, setEndGame }) {
 
     const gameLost = useCallback(() => {
         setTimeout(() => {
-            setEndGame({message: 'You lose', submessage: ''});
+            setEndGame({message: 'You lose', submessage: 'You scored ' + points + ' points'});
         }, 500);
-    }, [setEndGame])
+    }, [setEndGame, points])
 
     const isThereCollision = useCallback((ballTop, ballLeft) => {
         if ( ballTop < topMinPos

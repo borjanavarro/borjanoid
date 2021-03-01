@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import Brick from '../Brick/index';
 
-function Wall({ clock, ballRef, vector, setEndGame }) {
+function Wall({ clock, ballRef, vector, points, setPoints, setEndGame }) {
     const wallData = useSelector(state => state.wall);
     const brickData = useSelector(state => state.brick);
     const [bricks, setBricks] = useState([]);
@@ -13,10 +13,10 @@ function Wall({ clock, ballRef, vector, setEndGame }) {
         
         if ( bricksDestroyed.current === bricks.length) {
             setTimeout(() => {
-                setEndGame({message: 'You win', submessage: 'You are awesome'});
+                setEndGame({message: 'You win', submessage: 'You scored ' + points + ' points'});
             }, 1000);
         }
-    }, [bricksDestroyed, bricks.length, setEndGame])
+    }, [bricksDestroyed, bricks.length, setEndGame, points])
 
     useEffect(() => {
         let top = wallData.topOffset;
@@ -44,6 +44,8 @@ function Wall({ clock, ballRef, vector, setEndGame }) {
                     brickLeft={elem.left} 
                     ballRef={ballRef}
                     vector={vector}
+                    points={points}
+                    setPoints={setPoints}
                     isGameWon={isGameWon}
                     />
         })
