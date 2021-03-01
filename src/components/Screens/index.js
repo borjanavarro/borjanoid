@@ -30,7 +30,7 @@ function Screens() {
 
         case SCREENS.WAIT_SCREEN:
             return (
-                <WaitScreen setScreens={setScreen} />
+                <WaitScreen setScreen={setScreen} />
             );
         
         case SCREENS.GAME_SCREEN:

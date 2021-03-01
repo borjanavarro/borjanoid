@@ -6,7 +6,6 @@ function Wall({ clock, ballRef, vector, setEndGame }) {
     const wallData = useSelector(state => state.wall);
     const brickData = useSelector(state => state.brick);
     const [bricks, setBricks] = useState([]);
-    const [collisionDetected, setCollisionDetected] = useState(false);
     const bricksDestroyed = useRef(0)
 
     const isGameWon = useCallback(() => {
@@ -45,8 +44,6 @@ function Wall({ clock, ballRef, vector, setEndGame }) {
                     brickLeft={elem.left} 
                     ballRef={ballRef}
                     vector={vector}
-                    collisionDetected={collisionDetected}
-                    setCollisionDetected={setCollisionDetected}
                     isGameWon={isGameWon}
                     />
         })

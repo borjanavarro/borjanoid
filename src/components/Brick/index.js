@@ -1,12 +1,11 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { black } from '../../utils/constants';
 
 import './styles.scss';
 
-function Brick({clock, brickTop, brickLeft, ballRef, vector, collisionDetected, setCollisionDetected }) {
+function Brick({clock, brickTop, brickLeft, ballRef, vector, isGameWon }) {
     const [destroyed, setDestroyed] = useState(false);
-    const brickRef = useRef();
     const brickData = useSelector(state => state.brick);
     const ballData = useSelector(state => state.ball);
     const topMinPos = brickTop;
@@ -122,22 +121,12 @@ function Brick({clock, brickTop, brickLeft, ballRef, vector, collisionDetected, 
     }, [ballTopLeftisCollision, ballTopRightisCollision, ballBottomLeftisCollision, ballBottomRightisCollision, destroyed]);
 
     useEffect(() => {
-        if ( !collisionDetected ) {
-            if ( isCollision() ) {
-                setCollisionDetected(true);
-                setDestroyed(true);
-            }
+        if ( isCollision() ) {
+            setDestroyed(true);
+            isGameWon();
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [clock])
-
-    useEffect(() => {
-        if ( collisionDetected ) {
-            setTimeout(() => {
-                setCollisionDetected(false);
-            }, 68)
-        }
-    }, [collisionDetected, setCollisionDetected])
 
     return (
         <div className="brick-container" style={{
@@ -146,7 +135,7 @@ function Brick({clock, brickTop, brickLeft, ballRef, vector, collisionDetected, 
             width: brickData.width,
             height: brickData.height
         }}>
-            <div className="brick" ref={brickRef} style={{
+            <div className="brick" style={{
                 backgroundColor: destroyed ? 'transparent' : black
             }}></div>
         </div>

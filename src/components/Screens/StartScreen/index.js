@@ -6,7 +6,7 @@ import './styles.scss'
 function StartScreen({ setScreen }) {
 
     return (
-        <div className="container">
+        <div className="start-container">
             <div className="center-panel">
                 <h1>Arkanoid</h1>
                 <h3>The classic Arkanoid game</h3>

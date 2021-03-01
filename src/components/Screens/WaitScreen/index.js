@@ -3,7 +3,7 @@ import { GAME_SCREEN } from '../constants';
 
 import './styles.scss'
 
-function WaitScreen({ setScreens }) {
+function WaitScreen({ setScreen }) {
     const [counter, setCounter] = useState(3);
     const elem = useRef();
 
@@ -15,7 +15,7 @@ function WaitScreen({ setScreens }) {
                 elem.current.classList.remove('big');
                 setCounter(counter - 1);
                 if ( counter === 0 ) {
-                    setScreens(GAME_SCREEN);
+                    setScreen(GAME_SCREEN);
                 }
             }, 1000);
         }
@@ -24,10 +24,10 @@ function WaitScreen({ setScreens }) {
         
 
         return () => {clearInterval(interval);}
-    }, [counter, setScreens])
+    }, [counter, setScreen])
 
     return (
-        <div className="container">
+        <div className="wait-container">
             <div className="counter" ref={elem}>{counter}</div>
         </div>
     );

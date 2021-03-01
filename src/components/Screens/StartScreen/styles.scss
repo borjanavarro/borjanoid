@@ -4,7 +4,7 @@ body {
     background: url('../../../images/old_moon.png') repeat;
 }
 
-.container {
+.start-container {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -42,9 +42,6 @@ body {
     }
 
     button {
-        display: flex;
-        align-items: center;
-        justify-content: center;
         font-family: 'Arcade';
         font-size: 2em;
         margin-top: 80px;
@@ -53,6 +50,7 @@ body {
         border: none;
         color: $red;
         cursor: pointer;
+        height: 50px;
 
         &:hover {
             font-size: 2.5em;
