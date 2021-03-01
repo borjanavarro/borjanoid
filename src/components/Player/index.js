@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 
 import './styles.scss';
 
-function Player({ clock, /*ballTop, setBallTop, ballLeft,*/ vector, keyDown, ballRef }) {
+function Player({ clock, vector, keyDown, ballRef, pause }) {
     const boardData = useSelector(state => state.board);
     const ballData = useSelector(state => state.ball);
     const playerData = useSelector(state => state.player);
