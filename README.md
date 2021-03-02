@@ -1,4 +1,4 @@
-#Borjanoid
+# Borjanoid
 
 The classic Arganoid game developed in React JS
 
